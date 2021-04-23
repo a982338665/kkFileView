@@ -28,6 +28,7 @@ public class ServerMain {
         stopWatch.stop();
         Integer port = context.getBean(ServerProperties.class).getPort();
         logger.info("kkFileView 服务启动完成，耗时:{}s，演示页请访问: http://127.0.0.1:{} ", stopWatch.getTotalTimeSeconds(), port);
+        logger.info("swagger 服务启动完成，耗时:{}s，演示页请访问: http://127.0.0.1:{}{}", stopWatch.getTotalTimeSeconds(), port,"/swagger-ui.html");
     }
 
 }

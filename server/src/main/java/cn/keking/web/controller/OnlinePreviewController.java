@@ -10,6 +10,8 @@ import cn.keking.service.FileHandlerService;
 import cn.keking.utils.WebUtils;
 import fr.opensagres.xdocreport.core.io.IOUtils;
 import io.mola.galimatias.GalimatiasParseException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import jodd.io.NetUtil;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,6 +38,7 @@ import static cn.keking.service.FilePreview.PICTURE_FILE_PREVIEW_PAGE;
  * @author yudian-it
  */
 @Controller
+@Api(tags = "预览相关接口")
 public class OnlinePreviewController {
 
     public static final String BASE64_DECODE_ERROR_MSG = "Base64解码失败，请检查你的 %s 是否采用 Base64 + urlEncode 双重编码了！";
@@ -51,8 +55,8 @@ public class OnlinePreviewController {
         this.cacheService = cacheService;
         this.otherFilePreview = otherFilePreview;
     }
-
-    @RequestMapping(value = "/onlinePreview")
+    @ApiOperation(value = "在线预览", notes = "通过url在线预览")
+    @GetMapping(value = "/onlinePreview")
     public String onlinePreview(String url, Model model, HttpServletRequest req) {
         String fileUrl;
         try {
@@ -68,7 +72,8 @@ public class OnlinePreviewController {
         return filePreview.filePreviewHandle(fileUrl, model, fileAttribute);
     }
 
-    @RequestMapping(value = "/picturesPreview")
+    @GetMapping(value = "/picturesPreview")
+    @ApiOperation(value = "图片预览", notes = "")
     public String picturesPreview(String urls, Model model, HttpServletRequest req) throws UnsupportedEncodingException {
         String fileUrls;
         try {
@@ -100,6 +105,7 @@ public class OnlinePreviewController {
      * @param urlPath  url
      * @param response response
      */
+    @ApiOperation(value = "跨域文件下载", notes = "")
     @RequestMapping(value = "/getCorsFile", method = RequestMethod.GET)
     public void getCorsFile(String urlPath, HttpServletResponse response) {
         logger.info("下载跨域pdf文件url：{}", urlPath);
@@ -117,7 +123,8 @@ public class OnlinePreviewController {
      *
      * @param url 请编码后在入队
      */
-    @RequestMapping("/addTask")
+    @ApiOperation(value = "预处理接口", notes = "")
+    @GetMapping("/addTask")
     @ResponseBody
     public String addQueueTask(String url) {
         logger.info("添加转码队列url：{}", url);

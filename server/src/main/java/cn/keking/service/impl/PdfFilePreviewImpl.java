@@ -7,6 +7,8 @@ import cn.keking.service.FilePreview;
 import cn.keking.utils.DownloadUtils;
 import cn.keking.service.FileHandlerService;
 import cn.keking.web.filter.BaseUrlFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -18,6 +20,9 @@ import java.util.List;
  */
 @Service
 public class PdfFilePreviewImpl implements FilePreview {
+
+    private final Logger logger = LoggerFactory.getLogger(PdfFilePreviewImpl.class);
+
 
     private final FileHandlerService fileHandlerService;
     private final OtherFilePreviewImpl otherFilePreview;

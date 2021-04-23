@@ -99,6 +99,8 @@ public class FileHandlerService {
      * @param value    缓存相对路径
      */
     public void addConvertedFile(String fileName, String value) {
+        logger.info("缓存存储-{}，{}", fileName, value);
+        logger.error("缓存存储-{}，{}", fileName, value);
         cacheService.putPDFCache(fileName, value);
     }
 
@@ -165,10 +167,11 @@ public class FileHandlerService {
     }
 
     /**
-     *  pdf文件转换成jpg图片集
+     * pdf文件转换成jpg图片集
+     *
      * @param pdfFilePath pdf文件路径
-     * @param pdfName pdf文件名称
-     * @param baseUrl 基础访问地址
+     * @param pdfName     pdf文件名称
+     * @param baseUrl     基础访问地址
      * @return 图片访问集合
      */
     public List<String> pdf2jpg(String pdfFilePath, String pdfName, String baseUrl) {
@@ -219,11 +222,12 @@ public class FileHandlerService {
 
     /**
      * cad文件转pdf
-     * @param inputFilePath cad文件路径
+     *
+     * @param inputFilePath  cad文件路径
      * @param outputFilePath pdf输出文件路径
      * @return 转换是否成功
      */
-    public boolean cadToPdf(String inputFilePath, String outputFilePath)  {
+    public boolean cadToPdf(String inputFilePath, String outputFilePath) {
         com.aspose.cad.Image cadImage = com.aspose.cad.Image.load(inputFilePath);
         CadRasterizationOptions cadRasterizationOptions = new CadRasterizationOptions();
         cadRasterizationOptions.setLayouts(new String[]{"Model"});
@@ -276,7 +280,7 @@ public class FileHandlerService {
         attribute.setUrl(url);
         if (req != null) {
             String officePreviewType = req.getParameter("officePreviewType");
-            String fileKey = WebUtils.getUrlParameterReg(url,"fileKey");
+            String fileKey = WebUtils.getUrlParameterReg(url, "fileKey");
             if (StringUtils.hasText(officePreviewType)) {
                 attribute.setOfficePreviewType(officePreviewType);
             }
@@ -296,6 +300,7 @@ public class FileHandlerService {
 
     /**
      * 添加转换后的视频文件缓存
+     *
      * @param fileName
      * @param value
      */

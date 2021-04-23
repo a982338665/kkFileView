@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import cn.keking.model.ReturnResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StreamUtils;
@@ -25,6 +27,7 @@ import org.springframework.web.util.HtmlUtils;
  * @date 2017/12/1
  */
 @RestController
+@Api(tags = "文件相关内容")
 public class FileController {
 
     private final Logger logger = LoggerFactory.getLogger(FileController.class);
@@ -33,12 +36,13 @@ public class FileController {
     private final String demoDir = "demo";
     private final String demoPath = demoDir + File.separator;
 
+    @ApiOperation(value = "文件上传", notes = "单文件上传")
     @RequestMapping(value = "fileUpload", method = RequestMethod.POST)
     public String fileUpload(@RequestParam("file") MultipartFile file) throws JsonProcessingException {
         // 获取文件名
         String fileName = file.getOriginalFilename();
         //判断是否为IE浏览器的文件名，IE浏览器下文件名会带有盘符信息
-        
+
         // escaping dangerous characters to prevent XSS
         fileName = HtmlUtils.htmlEscape(fileName, StandardCharsets.UTF_8.name());
 
@@ -70,6 +74,7 @@ public class FileController {
     }
 
     @RequestMapping(value = "deleteFile", method = RequestMethod.GET)
+    @ApiOperation(value = "文件删除", notes = "删除指定文件")
     public String deleteFile(String fileName) throws JsonProcessingException {
         if (fileName.contains("/")) {
             fileName = fileName.substring(fileName.lastIndexOf("/") + 1);
@@ -82,6 +87,7 @@ public class FileController {
         return new ObjectMapper().writeValueAsString(ReturnResponse.success());
     }
 
+    @ApiOperation(value = "文件列表", notes = "列出所有文件")
     @RequestMapping(value = "listFiles", method = RequestMethod.GET)
     public String getFiles() throws JsonProcessingException {
         List<Map<String, String>> list = new ArrayList<>();
