@@ -30,3 +30,7 @@
     
      
    
+## 项目介绍
+    
+    D:\git-20210103\kkFileView\server\src\main\file\demo   此文件夹为上传目录，并非解析目录
+    D:\git-20210103\kkFileView\server\src\main\file\       此文件夹为：从远程url地址下载的文件存放目录

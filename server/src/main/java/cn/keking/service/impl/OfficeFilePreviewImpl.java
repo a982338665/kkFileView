@@ -7,12 +7,18 @@ import cn.keking.service.FilePreview;
 import cn.keking.utils.DownloadUtils;
 import cn.keking.service.FileHandlerService;
 import cn.keking.service.OfficeToPdfService;
+import cn.keking.web.controller.OnlinePreviewController;
 import cn.keking.web.filter.BaseUrlFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
+
+import static org.apache.logging.log4j.ThreadContext.containsKey;
 
 /**
  * Created by kl on 2018/1/17.
@@ -20,6 +26,9 @@ import java.util.List;
  */
 @Service
 public class OfficeFilePreviewImpl implements FilePreview {
+
+    private final Logger logger = LoggerFactory.getLogger(OfficeFilePreviewImpl.class);
+
 
     public static final String OFFICE_PREVIEW_TYPE_IMAGE = "image";
     public static final String OFFICE_PREVIEW_TYPE_ALL_IMAGES = "allImages";
@@ -46,7 +55,11 @@ public class OfficeFilePreviewImpl implements FilePreview {
         String pdfName = fileName.substring(0, fileName.lastIndexOf(".") + 1) + (isHtml ? "html" : "pdf");
         String outFilePath = FILE_DIR + pdfName;
         // 判断之前是否已转换过，如果转换过，直接返回，否则执行转换
-        if (!fileHandlerService.listConvertedFiles().containsKey(pdfName) || !ConfigConstants.isCacheEnabled()) {
+        Map<String, String> stringStringMap = fileHandlerService.listConvertedFiles();
+        logger.info("已缓存数据开始：======================================================");
+        stringStringMap.keySet().forEach(key -> logger.info(key + " = " + stringStringMap.get(key)));
+        logger.info("已缓存数据结束：======================================================");
+        if (!stringStringMap.containsKey(pdfName) || !ConfigConstants.isCacheEnabled()) {
             String filePath;
             ReturnResponse<String> response = DownloadUtils.downLoad(fileAttribute, null);
             if (response.isFailure()) {

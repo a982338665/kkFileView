@@ -35,11 +35,13 @@ public class DownloadUtils {
         String urlStr = fileAttribute.getUrl();
         ReturnResponse<String> response = new ReturnResponse<>(0, "下载成功!!!", "");
         String realPath = DownloadUtils.getRelFilePath(fileName, fileAttribute);
+        logger.info("download:fileName={},urlStr={},realPath={},fileAttribute={}", fileName, urlStr, realPath, fileAttribute);
         try {
             URL url = WebUtils.normalizedURL(urlStr);
             if (isHttpUrl(url)) {
                 File realFile = new File(realPath);
-                FileUtils.copyURLToFile(url,realFile);
+                logger.info("first-download:{},{}", urlStr, realPath);
+                FileUtils.copyURLToFile(url, realFile);
             } else if (isFtpUrl(url)) {
                 String ftpUsername = WebUtils.getUrlParameterReg(fileAttribute.getUrl(), URL_PARAM_FTP_USERNAME);
                 String ftpPassword = WebUtils.getUrlParameterReg(fileAttribute.getUrl(), URL_PARAM_FTP_PASSWORD);

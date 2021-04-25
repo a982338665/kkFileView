@@ -31,6 +31,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static cn.keking.service.FilePreview.PICTURE_FILE_PREVIEW_PAGE;
 
@@ -55,6 +56,7 @@ public class OnlinePreviewController {
         this.cacheService = cacheService;
         this.otherFilePreview = otherFilePreview;
     }
+
     @ApiOperation(value = "在线预览", notes = "通过url在线预览")
     @GetMapping(value = "/onlinePreview")
     public String onlinePreview(String url, Model model, HttpServletRequest req) {
@@ -69,7 +71,10 @@ public class OnlinePreviewController {
         model.addAttribute("file", fileAttribute);
         FilePreview filePreview = previewFactory.get(fileAttribute);
         logger.info("预览文件url：{}，previewType：{}", fileUrl, fileAttribute.getType());
-        return filePreview.filePreviewHandle(fileUrl, model, fileAttribute);
+        String returnVal = filePreview.filePreviewHandle(fileUrl, model, fileAttribute);
+        logger.info("返回信息：{}", returnVal);
+        model.asMap().keySet().forEach(key -> logger.info(key + " = " + model.asMap().get(key)));
+        return returnVal;
     }
 
     @GetMapping(value = "/picturesPreview")

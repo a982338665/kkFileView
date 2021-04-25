@@ -100,7 +100,6 @@ public class FileHandlerService {
      */
     public void addConvertedFile(String fileName, String value) {
         logger.info("缓存存储-{}，{}", fileName, value);
-        logger.error("缓存存储-{}，{}", fileName, value);
         cacheService.putPDFCache(fileName, value);
     }
 
@@ -175,6 +174,7 @@ public class FileHandlerService {
      * @return 图片访问集合
      */
     public List<String> pdf2jpg(String pdfFilePath, String pdfName, String baseUrl) {
+        logger.info("pdf2jpg:{},{},{}",pdfFilePath,pdfName,baseUrl);
         List<String> imageUrls = new ArrayList<>();
         Integer imageCount = this.getConvertedPdfImage(pdfFilePath);
         String imageFileSuffix = ".jpg";
@@ -210,13 +210,17 @@ public class FileHandlerService {
                 imageFilePath = folder + File.separator + pageIndex + imageFileSuffix;
                 BufferedImage image = pdfRenderer.renderImageWithDPI(pageIndex, 105, ImageType.RGB);
                 ImageIOUtil.writeImage(image, imageFilePath, 105);
+                logger.info("写图片：{}", imageFilePath);
                 imageUrls.add(urlPrefix + "/" + pageIndex + imageFileSuffix);
             }
             doc.close();
+            //添加图片缓存
+            logger.info("添加图片缓存：pdfFilePath={}，pageCount={}", pdfFilePath, pageCount);
             this.addConvertedPdfImage(pdfFilePath, pageCount);
         } catch (IOException e) {
             logger.error("Convert pdf to jpg exception, pdfFilePath：{}", pdfFilePath, e);
         }
+        logger.info("最终图片地址：imageUrls={}", imageUrls);
         return imageUrls;
     }
 

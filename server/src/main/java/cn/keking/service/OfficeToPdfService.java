@@ -29,13 +29,15 @@ public class OfficeToPdfService {
         File outputFile = new File(outputFilePath_end);
         // 假如目标路径不存在,则新建该路径
         if (!outputFile.getParentFile().exists() && !outputFile.getParentFile().mkdirs()) {
-            logger.error("创建目录【{}】失败，请检查目录权限！",outputFilePath_end);
+            logger.error("创建目录【{}】失败，请检查目录权限！", outputFilePath_end);
         }
+        logger.info("文件转换==={}，\n{}", inputFile.getAbsolutePath(), outputFile.getAbsolutePath());
         converter.convert(inputFile, outputFile);
     }
 
 
     public void office2pdf(String inputFilePath, String outputFilePath) {
+        logger.info("second-file:inputFilePath={},outputFilePath={}", inputFilePath, outputFilePath);
         OfficeDocumentConverter converter = officePluginManager.getDocumentConverter();
         if (null != inputFilePath) {
             File inputFile = new File(inputFilePath);
@@ -45,7 +47,7 @@ public class OfficeToPdfService {
                 String outputFilePath_end = getOutputFilePath(inputFilePath);
                 if (inputFile.exists()) {
                     // 找不到源文件, 则返回
-                    converterFile(inputFile, outputFilePath_end,converter);
+                    converterFile(inputFile, outputFilePath_end, converter);
                 }
             } else {
                 if (inputFile.exists()) {
@@ -57,7 +59,7 @@ public class OfficeToPdfService {
     }
 
     public static String getOutputFilePath(String inputFilePath) {
-        return inputFilePath.replaceAll("."+ getPostfix(inputFilePath), ".pdf");
+        return inputFilePath.replaceAll("." + getPostfix(inputFilePath), ".pdf");
     }
 
     public static String getPostfix(String inputFilePath) {
